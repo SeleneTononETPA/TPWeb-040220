@@ -76,11 +76,6 @@ function create(){
 		frameRate: 20
 	});
 	
-	stars = this.physics.add.group({
-		key: 'etoile',
-		repeat:11,
-		setXY: {x:12,y:0,stepX:70}
-	});
 	
 	this.physics.add.collider(stars,platforms);
 	this.physics.add.overlap(player,stars,collectStar,null,this);
@@ -126,6 +121,7 @@ function update(){
 
 
 function hitBomb(player, bomb){
+	bomb.disableBody(true, true);
 	this.physics.pause();
 	player.setTint(0xff0000);
 	player.anims.play('turn');
