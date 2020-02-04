@@ -48,7 +48,7 @@ function create(){
 	player = this.physics.add.sprite(100,450,'perso');
 	player.setCollideWorldBounds(true);
 	player.setBounce(0.2);
-	player.body.setGravityY(000);
+	player.body.setGravityY(0);
 	this.physics.add.collider(player,platforms);
 	
 	cursors = this.input.keyboard.createCursorKeys(); 
