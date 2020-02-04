@@ -28,14 +28,13 @@ var bomb;
 
 function preload(){
 	this.load.image('background','asset/sky.png');	
-	
 	this.load.image('sol','asset/platform.png');
-	this.load.image('bomb','asset/bomb.png');
-	
 	this.load.spritesheet('perso','asset/perso.png',{frameWidth: 32, frameHeight: 32});
 
-	//this.load.image('etoile','asset/star.png');
+	this.load.image('etoile','asset/star.png');
+	this.load.image('bomb','asset/bomb.png');
 }
+
 
 
 
@@ -64,7 +63,7 @@ function create(){
 	/*Creation des input directionnelles*/
 	cursors = this.input.keyboard.createCursorKeys(); 
 	
-	/*this.anims.create({
+	this.anims.create({
 		key:'left',
 		frames: this.anims.generateFrameNumbers('perso', {start: 0, end: 6}),
 		frameRate: 10,
@@ -89,7 +88,7 @@ function create(){
 	scoreText = this.add.text(16,16, 'score: 0', {fontSize: '32px', fill:'#000'});
 	bombs = this.physics.add.group();
 	this.physics.add.collider(bombs,platforms);
-	this.physics.add.collider(player,bombs, hitBomb, null, this);*/
+	this.physics.add.collider(player,bombs, hitBomb, null, this);
 	
 }
 
@@ -108,23 +107,24 @@ function update(){
 	if(cursors.left.isDown)
 	{
 		player.setVelocityX(-200);
-		player.anims.play('right', true);
+		player.anims.play('left', true);
 		player.setFlipX(true);
 	}
 	else if(cursors.right.isDown)
 	{
 		player.setVelocityX(200	);
-		player.anims.play('right', true);
+		player.anims.play('left', true);
 		player.setFlipX(false);
 	}
 	else
 	{
 		player.setVelocityX(0);
-		//player.anims.play('stop', true);
+		player.anims.play('stop', true);
 	}
-
 }
-/*
+
+
+
 function hitBomb(player, bomb){
 	this.physics.pause();
 	player.setTint(0xff0000);
@@ -150,5 +150,5 @@ function collectStar(player, star){
 		bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
 	}
 }
-*/
+
 
