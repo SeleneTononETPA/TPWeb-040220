@@ -27,21 +27,24 @@ var bomb;
 
 
 function preload(){
-	this.load.image('background','assets/sky.png');	
-	this.load.image('fond','assets/fond.png');
-	this.load.image('etoile','assets/star.png');
+	this.load.image('background','assets/Taiga-Asset-Pack_vnitti/PNG/Background.png');	
+	this.load.image('fond','assets/Taiga-Asset-Pack_vnitti/PNG/Middleground.png');
+	this.load.spritesheet('diamant','assets/Kings and Pigs/Sprites/12-Live_and_Coins/Big_Diamond_Idle (18x14).png',{frameWidth: 18, frameHeight: 14});
 	this.load.image('sol','assets/platform.png');
-	this.load.image('bomb','assets/bomb.png');
-	this.load.spritesheet('perso','assets/blabla.png',{frameWidth: 32, frameHeight: 48});
+	this.load.image('bomb','assets/Kings and Pigs/Sprites/09-Bomb/Bomb Off.png');
+	this.load.spritesheet('perso','assets/free-pixel-art-tiny-hero-sprites/1 Pink_Monster/Pink_Monster_Idle_4.png',{frameWidth: 32, frameHeight: 32});
 }
 
 
 
 function create(){
-	this.add.image(400,300,'background');
+	this.add.image(400,300,'background').setScale(3);
 
 	platforms = this.physics.add.staticGroup();
-	platforms.create(400,568,'sol').setScale(2).refreshBody();
+	platforms.create(0,550,'sol').setOrigin(0,0).setScale(2).refreshBody();
+	platforms.create(228,550,'sol').setOrigin(0,0).setScale(2).refreshBody();
+	platforms.create(456,550,'sol').setOrigin(0,0).setScale(2).refreshBody();
+	platforms.create(684,550,'sol').setOrigin(0,0).setScale(2).refreshBody();
 	platforms.create(600,400,'sol');
 	platforms.create(50,250,'sol');
 	
@@ -67,7 +70,7 @@ function create(){
 	});
 	
 	stars = this.physics.add.group({
-		key: 'etoile',
+		key: 'diamant',
 		repeat:11,
 		setXY: {x:12,y:0,stepX:70}
 	});
@@ -87,11 +90,11 @@ function update(){
 	if(cursors.left.isDown){
 		player.anims.play('left', true);
 		player.setVelocityX(-300);
-		player.setFlipX(false);
+		player.setFlipX(true);
 	}else if(cursors.right.isDown){
 		player.setVelocityX(300);
 		player.anims.play('left', true);
-		player.setFlipX(true);
+		player.setFlipX(false);
 	}else{
 		player.anims.play('stop', true);
 		player.setVelocityX(0);
