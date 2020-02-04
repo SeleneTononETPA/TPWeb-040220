@@ -18,8 +18,10 @@ scene: {
 
 var game = new Phaser.Game(config);
 var score = 0;
+
 var platforms;
 var player;
+var jump = 0;
 var cursors; 
 var stars;
 var scoreText;
@@ -53,16 +55,16 @@ function create(){
 	platforms.create(200,270,'sol').setScale(0.75,0.5).refreshBody();
 	
 	/*Joueur*/
-	player = this.physics.add.sprite(100, 450, 'perso').setScale(2);
+	player = this.physics.add.sprite(100, 500, 'perso').setScale(2);
 	player.setBounce(0.2);
 	player.setCollideWorldBounds(true);
 	this.physics.add.collider(player,platforms);
-	//player.body.setGravityY(000);
 	this.physics.add.collider(player,platforms);
 	
 	/*Creation des input directionnelles*/
 	cursors = this.input.keyboard.createCursorKeys(); 
 	
+		//Animation du joueur
 	this.anims.create({
 		key:'left',
 		frames: this.anims.generateFrameNumbers('perso', {start: 0, end: 6}),
@@ -76,11 +78,22 @@ function create(){
 		frameRate: 20
 	});
 	
+	/*Collectible*/
+	stars = this.physics.add.group({
+		key: 'etoile',
+		repeat:11,
+		setXY: {x:12,y:0,stepX:70}
+	});
 	
 	this.physics.add.collider(stars,platforms);
 	this.physics.add.overlap(player,stars,collectStar,null,this);
 
+	/*Textes*/
+		//Score
 	scoreText = this.add.text(16,16, 'score: 0', {fontSize: '32px', fill:'#000'});
+
+	/*Ennemi*/
+		//Bombes
 	bombs = this.physics.add.group();
 	this.physics.add.collider(bombs,platforms);
 	this.physics.add.collider(player,bombs, hitBomb, null, this);
@@ -93,11 +106,23 @@ function update(){
 
 /*	/*Déplacement*/
 		//Saut
-	if(cursors.up.isDown && player.body.touching.down)
-	{
-		player.setVelocityY(-530);
+	 if (player.body.touching.down) 
+	 {
+        jump = 1;
+     }
+     
+     if (cursors.up.isDown && jump == 1) 
+     {
+        jump++;
+        player.body.velocity.y = -400;
+     }
 
-	}
+     if (cursors.up.isDown && jump == 2) 
+     {
+        player.body.velocity.y = -400;
+     }
+     
+    
 		//Droite et gauche
 	if(cursors.left.isDown)
 	{
@@ -107,7 +132,7 @@ function update(){
 	}
 	else if(cursors.right.isDown)
 	{
-		player.setVelocityX(200	);
+		player.setVelocityX(200);
 		player.anims.play('left', true);
 		player.setFlipX(false);
 	}
@@ -122,6 +147,7 @@ function update(){
 
 function hitBomb(player, bomb){
 	bomb.disableBody(true, true);
+
 	this.physics.pause();
 	player.setTint(0xff0000);
 	player.anims.play('turn');
