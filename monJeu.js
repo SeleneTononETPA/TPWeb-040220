@@ -10,6 +10,7 @@ physics: {
         }
     },
 scene: {
+		init: init,
 		preload: preload,
 		create: create,
 		update: update
@@ -18,13 +19,15 @@ scene: {
 
 var game = new Phaser.Game(config);
 var score = 0;
-var platforms;
-var player;
-var cursors; 
-var stars;
-var scoreText;
-var bomb;
 
+function init(){
+ 	var platforms;
+	var player;
+	var cursors; 
+	var stars;
+	var scoreText;
+	var bomb;
+}
 
 function preload(){
 	this.load.image('background','assets/Taiga-Asset-Pack_vnitti/PNG/Background.png');	
