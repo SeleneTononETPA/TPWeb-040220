@@ -6,7 +6,7 @@ physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 300 },
-            debug: true
+            debug: false
         }
     },
 scene: {
@@ -19,6 +19,7 @@ scene: {
 
 var game = new Phaser.Game(config);
 var score = 0;
+var jump = 1;
 
 function init(){
  	var platforms;
@@ -32,24 +33,28 @@ function init(){
 function preload(){
 	this.load.image('fond','assets/fond.png');
 	this.load.image('etoile','assets/star.png');
-	this.load.image('sol','assets/platform.png');
+	this.load.image('platform','assets/platform.png');
+	this.load.image('sol','assets/sol.png');
 	this.load.image('bomb','assets/bomb.png');
-	this.load.spritesheet('perso','assets/dude.png',{frameWidth: 32, frameHeight: 48});
+	this.load.spritesheet('perso','assets/dude.png',{frameWidth: 11, frameHeight: 35});
+	this.load.spritesheet('persoleft','assets/dudeleft.png',{frameWidth: 21, frameHeight: 35});
 }
 
 
 
 function create(){
-	this.add.image(400,300,'background');
+	this.add.image(400,300,'fond');
 
 	platforms = this.physics.add.staticGroup();
-	platforms.create(400,568,'sol').setScale(2).refreshBody();
-	platforms.create(600,400,'sol');
-	platforms.create(50,250,'sol');
+	platforms.create(400,590,'sol');
+	platforms.create(600,500,'platform');
+	platforms.create(100,500,'platform');
+	platforms.create(50,250,'platform');
+	platforms.create(380,400,'platform');
+	platforms.create(600,300,'platform');
 	
 	player = this.physics.add.sprite(100,450,'perso');
 	player.setCollideWorldBounds(true);
-	player.setBounce(0.2);
 	player.body.setGravityY(000);
 	this.physics.add.collider(player,platforms);
 	
@@ -57,15 +62,16 @@ function create(){
 	
 	this.anims.create({
 		key:'left',
-		frames: this.anims.generateFrameNumbers('perso', {start: 0, end: 3}),
+		frames: this.anims.generateFrameNumbers('persoleft', {start: 0, end: 3}),
 		frameRate: 10,
 		repeat: -1
 	});
 	
 	this.anims.create({
 		key:'stop',
-		frames: [{key: 'perso', frame:4}],
-		frameRate: 20
+		frames: this.anims.generateFrameNumbers('perso', {start: 1, end: 4}),
+		frameRate: 2,
+		repeat : -1
 	});
 	
 	stars = this.physics.add.group({
@@ -88,20 +94,26 @@ function create(){
 function update(){
 	if(cursors.left.isDown){
 		player.anims.play('left', true);
-		player.setVelocityX(-300);
-		player.setFlipX(false);
-	}else if(cursors.right.isDown){
-		player.setVelocityX(300);
-		player.anims.play('left', true);
+		player.setVelocityX(-200);
 		player.setFlipX(true);
+	}else if(cursors.right.isDown){
+		player.setVelocityX(200);
+		player.anims.play('left', true);
+		player.setFlipX(false);
 	}else{
 		player.anims.play('stop', true);
 		player.setVelocityX(0);
 	}
-	
+	if(player.body.touching.down){
+	jump = 1;
+	}
 	if(cursors.up.isDown && player.body.touching.down){
-		player.setVelocityY(-330);
-	} 
+		player.setVelocityY(-200);
+	} else if(cursors.up.isDown && player.body.velocity.y>-50 && jump==1){
+		player.setVelocityY(-200)
+		jump = 0;
+	}
+
 	
 }
 function hitBomb(player, bomb){
