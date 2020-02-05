@@ -5,7 +5,7 @@ var config = {
 physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 500 },
+            gravity: { y: 600 },
             debug: true
         }
     },
@@ -59,20 +59,20 @@ function create(){
 	platforms.create(400,588,'platehaute');
 	platforms.create(100,588,'sol');
 	platforms.create(600,588,'sol');
-	platforms.create(600,400,'platehaute');
-	platforms.create(50,250,'platehaute');
+//	platforms.create(600,400,'platehaute');
+//	platforms.create(50,250,'platehaute');
 
 	player = this.physics.add.sprite(100,450,'perso');
 	player.setCollideWorldBounds(true);
 	player.setBounce(0);
-	player.body.setGravityY(000);
+	player.body.setGravityY(100);
 	this.physics.add.collider(player,platforms);
 
 	cursors = this.input.keyboard.createCursorKeys();
 
 	this.anims.create({
 		key:'left',
-		frames: this.anims.generateFrameNumbers('perso', {start: 0, end: 7}),
+		frames: this.anims.generateFrameNumbers('perso', {start: 0, end: 5}),
 		frameRate: 5,
 		repeat: -1
 	});
@@ -105,10 +105,10 @@ function create(){
 function update(){
 	if(cursors.left.isDown){
 		player.anims.play('left', true);
-		player.setVelocityX(-200);
+		player.setVelocityX(-150);
 		player.setFlipX(true);
 	}else if(cursors.right.isDown){
-		player.setVelocityX(200);
+		player.setVelocityX(150);
 		player.anims.play('left', true);
 		player.setFlipX(false);
 	}else{
