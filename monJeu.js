@@ -28,6 +28,8 @@ function init(){
 	var scoreText;
 	var bomb;
 }
+var save_saut = 2;
+var save_touche =1;
 
 function preload(){
 	this.load.image('background','assets/background.png');
@@ -100,9 +102,30 @@ function update(){
 		player.anims.play('stop', true);
 		player.setVelocityX(0);
 	}
+	if (cursors.up.isDown &&player.body.touching.down) {
+		player.setVelocityY(-350);
+		console.log(player.x);
+	}
 
-	if(cursors.up.isDown && player.body.touching.down){
-		player.setVelocityY(-330);
+
+	var alea = Phaser.Math.Between(1,2);
+
+	if (player.x < 300 && alea == 1) {
+		bombs.setVelocityX(Phaser.Math.Between(-400,-100));
+		alea = Phaser.Math.Between(1,2);
+	}
+	else if (player.x < 300 && alea == 2){
+		bombs.setVelocityX(Phaser.Math.Between(0, 600));
+		alea = Phaser.Math.Between(1,2)
+	}
+
+	if (player.x > 300 && alea == 1) {
+		bombs.setVelocityX(Phaser.Math.Between(100, 400));
+		alea = Phaser.Math.Between(1,2);
+	}
+	else if (player.x > 300 && alea == 2){
+		bombs.setVelocityX(0,800);
+		alea = Phaser.Math.Between(1,2);
 	}
 
 }
@@ -128,6 +151,10 @@ function collectStar(player, star){
 		var bomb = bombs.create(x, 16, 'bomb');
 		bomb.setBounce(1);
 		bomb.setCollideWorldBounds(true);
-		bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+		var velo_x_bombe = (player.x < 400) ?
+		Phaser.Math.Between(-400,-100):
+		Phaser.Math.Between(100,400);
+		bombs.setVelocityX(velo_x_bombe);
+
 	}
 }
