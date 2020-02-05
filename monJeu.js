@@ -19,6 +19,8 @@ scene: {
 
 var game = new Phaser.Game(config);
 var score = 0;
+var savesaut = 0;
+var veriftouche = 1;
 
 function init(){
  	var platforms;
@@ -116,9 +118,27 @@ function update() {
     player.setVelocityY(2000);
     player.anims.play('stop', true);
   }
-  if (cursors.up.isDown && !player.body.touching.down) {
+  if (!player.body.touching.down) {
     player.anims.play('jump', true);
   }
+
+
+	if (savesaut === 0 && player.body.touching.down && cursors.up.isDown) {
+		player.anims.play('jump', true);
+		player.setVelocityY(-500);
+		savesaut = 1;
+		veriftouche = 0;
+	} else if (cursors.down.isDown && !player.body.touching.down) {
+    player.setVelocityY(2000);
+    player.anims.play('stop', true);
+	}
+	if (cursors.up.isUp) {
+		veriftouche = 1;
+	}
+	if (savesaut === 1 && cursors.up.isDown && veriftouche === 1) {
+		player.setVelocityY(-500);
+		savesaut = 0;
+	}
 
 
 
