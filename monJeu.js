@@ -47,8 +47,9 @@ function create(){
 	platforms.create(300,600,'platform');
 	platforms.create(500,600,'platform');
 	platforms.create(700,600,'platform');
-	platforms.create(600,400,'platform');
-	platforms.create(50,250,'platform');
+	platforms.create(100,450,'platform');
+	platforms.create(400,300,'platform');
+	platforms.create(700,150,'platform');
 
 	player = this.physics.add.sprite(100,550,'perso');
 	player.setCollideWorldBounds(true);
@@ -68,6 +69,13 @@ function create(){
 		key:'stop',
 		frames: this.anims.generateFrameNumbers('perso', {start: 0, end: 3}),
 		frameRate: 5,
+		repeat: -1
+	});
+
+	this.anims.create({
+		key:'jump',
+		frames: this.anims.generateFrameNumbers('perso', {start: 14, end: 23}),
+		frameRate: 20,
 		repeat: -1
 	});
 
@@ -102,16 +110,23 @@ function update() {
 		player.setVelocityX(0);
 	}
 
-	if(cursors.up.isDown && player.body.touching.down){
-		player.setVelocityY(-600);
-	}
+	if (cursors.up.isDown && player.body.touching.down) {
+    player.setVelocityY(-700);
+  } else if (cursors.down.isDown && !player.body.touching.down) {
+    player.setVelocityY(2000);
+    player.anims.play('stop', true);
+  }
+  if (cursors.up.isDown && !player.body.touching.down) {
+    player.anims.play('jump', true);
+  }
+
+
 
 }
 
 function hitBomb(player, bomb){
 	this.physics.pause();
 	player.setTint(0xff0000);
-	player.anims.play('turn');
 	gameOver=true;
 }
 
@@ -124,12 +139,10 @@ function collectStar(player, star){
 			child.enableBody(true,child.x,0, true, true);
 		});
 
-		var x = (player.x < 400) ?
-			Phaser.Math.Between(400,800):
-			Phaser.Math.Between(0,400);
+		var x = (player.x < 400) ? Phaser.Math.Between(400,800) :	Phaser.Math.Between(0,400);
 		var bomb = bombs.create(x, 16, 'bomb');
 		bomb.setBounce(1);
 		bomb.setCollideWorldBounds(true);
-		bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+		bomb.setVelocity(Phaser.Math.Between(-200, 400), 10);
 	}
 }
