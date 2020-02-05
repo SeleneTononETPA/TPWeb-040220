@@ -112,15 +112,7 @@ function update() {
 		player.setVelocityX(0);
 	}
 
-	if (cursors.up.isDown && player.body.touching.down) {
-    player.setVelocityY(-700);
-  } else if (cursors.down.isDown && !player.body.touching.down) {
-    player.setVelocityY(2000);
-    player.anims.play('stop', true);
-  }
-  if (!player.body.touching.down) {
-    player.anims.play('jump', true);
-  }
+
 
 
 	if (savesaut === 0 && player.body.touching.down && cursors.up.isDown) {
