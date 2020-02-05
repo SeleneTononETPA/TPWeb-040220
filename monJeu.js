@@ -43,9 +43,19 @@ function create(){
 	this.add.image(400,300,'background');
 
 	platforms = this.physics.add.staticGroup();
+<<<<<<< Updated upstream
 	platforms.create(400,568,'sol').setScale(2).refreshBody();
 	platforms.create(600,400,'sol');
 	platforms.create(50,250,'sol');
+=======
+	platforms.create(400,590,'sol');
+	platforms.create(600,500,'platform');
+	platforms.create(100,500,'platform');
+	platforms.create(50,270,'platform');
+	platforms.create(380,380,'platform');
+	platforms.create(600,260,'platform');
+	platforms.create(450,150,'platform');
+>>>>>>> Stashed changes
 	
 	player = this.physics.add.sprite(100,450,'perso');
 	player.setCollideWorldBounds(true);
@@ -100,6 +110,7 @@ function update(){
 	}
 	
 	if(cursors.up.isDown && player.body.touching.down){
+<<<<<<< Updated upstream
 		player.setVelocityY(-330);
 	} 
 	
@@ -115,6 +126,27 @@ function collectStar(player, star){
 	star.disableBody(true,true);
 	score += 10;
 	scoreText.setText('score: '+score);
+=======
+		player.setVelocityY(-200);
+	} else if(cursors.up.isDown && player.body.velocity.y>-50 && jump==1){
+		player.setVelocityY(-200)
+		jump = 0;
+	}
+	if(1){
+		stars.children.iterate(function(child){
+			if(Math.sqrt(Math.pow(child.x-player.x, 2)+Math.pow(child.y-player.y, 2))<200){
+					score += 10;
+					scoreText.setText('score: '+score);
+					child.disableBody(true,true);
+			}
+		});
+		bombs.children.iterate(function(child){
+			if(Math.sqrt(Math.pow(child.x-player.x, 2)+Math.pow(child.y-player.y, 2))<200){
+					child.disableBody(true,true);
+				}
+		})
+	}
+>>>>>>> Stashed changes
 	if(stars.countActive(true)===0){
 		stars.children.iterate(function(child){
 			child.enableBody(true,child.x,0, true, true);
@@ -128,4 +160,17 @@ function collectStar(player, star){
 		bomb.setCollideWorldBounds(true);
 		bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
 	}
+}
+
+function hitBomb(player, bomb){
+	this.physics.pause();
+	player.setTint(0xff0000);
+	player.anims.play('turn');
+	gameOver=true;
+}
+
+function collectStar(player, star){
+	star.disableBody(true,true);
+	score += 10;
+	scoreText.setText('score: '+score);
 }
