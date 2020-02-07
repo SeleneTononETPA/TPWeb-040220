@@ -27,7 +27,12 @@ function init(){
 	var stars;
 	var scoreText;
 	var bomb;
+	var over;
 }
+
+var save_touch =1 ;
+var save_saut = 2;
+var velo= 300;
 
 function preload(){
 	this.load.image('background','assets/background.png');
@@ -42,6 +47,11 @@ function preload(){
 
 
 function create(){
+
+
+// add key boost
+
+boost = this.input.keyboard.addKey('NUMPAD_ZERO');
 	this.add.image(400,300,'background');
 
 	platforms = this.physics.add.staticGroup();
@@ -89,11 +99,13 @@ function create(){
 
 function update(){
 	if(cursors.left.isDown){
+		velo = -300;
 		player.anims.play('left', true);
-		player.setVelocityX(-300);
+		player.setVelocityX(velo);
 		player.setFlipX(true);
 	}else if(cursors.right.isDown){
-		player.setVelocityX(300);
+		velo = 300;
+		player.setVelocityX(velo);
 		player.anims.play('left', true);
 		player.setFlipX(false);
 	}else{
@@ -101,8 +113,27 @@ function update(){
 		player.setVelocityX(0);
 	}
 
-	if(cursors.up.isDown && player.body.touching.down){
+	if(cursors.up.isDown && save_saut > 0 && save_touch == 1){
 		player.setVelocityY(-330);
+		save_saut -=1;
+		save_touch -=1;
+		if (save_saut == 1) {
+			player.setVelocityY(-250);
+		}
+		if (save_saut == 0) {
+			player.setVelocityY(-250);
+		}
+	}
+	if (cursors.up.isUp) {
+		save_touch = 1;
+	}
+	if (cursors.up.isUp && player.body.touching.down) {
+		save_saut = 2;
+	}
+
+	if (boost.isDown && cursors.left.isDown || boost.isDown && cursors.right.isDown) {
+		player.setVelocityX(velo*2);
+		player.anims.play('left', true);
 	}
 
 	var velo_bomb_x = (player.x < 300) ?
@@ -116,6 +147,8 @@ function hitBomb(player, bomb){
 	player.setTint(0xff0000);
 	player.anims.play('turn');
 	gameOver=true;
+	over = this.add.text(130,220, 'Game Over', {fontSize: '100px', fill:'#000'});
+	player.anims.play('stop', true , true);
 }
 
 function collectStar(player, star){
