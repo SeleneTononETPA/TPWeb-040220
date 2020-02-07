@@ -99,18 +99,6 @@ function update(){
 		player.anims.play('stop', true);
 		player.setVelocityX(0);
 	}
-<<<<<<< Updated upstream
-	if (cursors.up.isDown &&player.body.touching.down) {
-		player.setVelocityY(-350);
-
-	}
-
-
-	var velo_x_bombe = (player.x < 300) ?
-	Phaser.Math.Between(-400,-800):
-	Phaser.Math.Between(100,400);
-	bombs.setVelocityX(velo_x_bombe);
-=======
 
 	if(cursors.up.isDown && player.body.touching.down){
 		player.setVelocityY(-330);
@@ -120,7 +108,6 @@ function update(){
 	Phaser.Math.Between(-400, -800):
 	Phaser.Math.Between(100,800);
 	bombs.setVelocityX(velo_bomb_x);
->>>>>>> Stashed changes
 
 }
 function hitBomb(player, bomb){
