@@ -104,29 +104,14 @@ function update(){
 	}
 	if (cursors.up.isDown &&player.body.touching.down) {
 		player.setVelocityY(-350);
-		console.log(player.x);
+
 	}
 
 
-	var alea = Phaser.Math.Between(1,2);
-
-	if (player.x < 300 && alea == 1) {
-		bombs.setVelocityX(Phaser.Math.Between(-400,-100));
-		alea = Phaser.Math.Between(1,2);
-	}
-	else if (player.x < 300 && alea == 2){
-		bombs.setVelocityX(Phaser.Math.Between(0, 600));
-		alea = Phaser.Math.Between(1,2)
-	}
-
-	if (player.x > 300 && alea == 1) {
-		bombs.setVelocityX(Phaser.Math.Between(100, 400));
-		alea = Phaser.Math.Between(1,2);
-	}
-	else if (player.x > 300 && alea == 2){
-		bombs.setVelocityX(0,800);
-		alea = Phaser.Math.Between(1,2);
-	}
+	var velo_x_bombe = (player.x < 300) ?
+	Phaser.Math.Between(-400,-800):
+	Phaser.Math.Between(100,400);
+	bombs.setVelocityX(velo_x_bombe);
 
 }
 function hitBomb(player, bomb){
