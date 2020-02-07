@@ -29,6 +29,9 @@ function init(){
 	var bomb;
 }
 
+var save_touch =1 ;
+var save_saut = 2;
+
 function preload(){
 	this.load.image('background','assets/background.png');
 	//this.load.image('fond','assets/fond.png');
@@ -101,8 +104,22 @@ function update(){
 		player.setVelocityX(0);
 	}
 
-	if(cursors.up.isDown && player.body.touching.down){
+	if(cursors.up.isDown && save_saut > 0 && save_touch == 1){
 		player.setVelocityY(-330);
+		save_saut -=1;
+		save_touch -=1;
+		if (save_saut == 1) {
+			player.setVelocityY(-250);
+		}
+		if (save_saut == 0) {
+			player.setVelocityY(-250);
+		}
+	}
+	if (cursors.up.isUp) {
+		save_touch = 1;
+	}
+	if (cursors.up.isUp && player.body.touching.down) {
+		save_saut = 2;
 	}
 
 	var velo_bomb_x = (player.x < 300) ?
