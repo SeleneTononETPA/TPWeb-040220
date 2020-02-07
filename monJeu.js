@@ -28,17 +28,14 @@ function init(){
 	var scoreText;
 	var bomb;
 }
-var save_saut = 2;
-var save_touche =1;
 
 function preload(){
-	this.load.image('background','assets/background.png');
-	//this.load.image('fond','assets/fond.png');
-	this.load.image('etoile','assets/gem.png');
+	this.load.image('background','assets/sky.png');
+	this.load.image('fond','assets/fond.png');
+	this.load.image('etoile','assets/star.png');
 	this.load.image('sol','assets/platform.png');
-	this.load.image('bomb','assets/boule.png');
-	this.load.spritesheet('perso','assets/sprite.png',{frameWidth: 19, frameHeight: 22});
-	this.load.spritesheet('stop', 'assets/stop.png', {frameWidth: 18 , frameHeight: 22});
+	this.load.image('bomb','assets/bomb.png');
+	this.load.spritesheet('perso','assets/dude.png',{frameWidth: 32, frameHeight: 48});
 }
 
 
@@ -47,8 +44,8 @@ function create(){
 	this.add.image(400,300,'background');
 
 	platforms = this.physics.add.staticGroup();
-	platforms.create(355,568,'sol').setScale(3).refreshBody();
-	platforms.create(650,350,'sol');
+	platforms.create(400,568,'sol').setScale(2).refreshBody();
+	platforms.create(600,400,'sol');
 	platforms.create(50,250,'sol');
 
 	player = this.physics.add.sprite(100,450,'perso');
@@ -61,14 +58,14 @@ function create(){
 
 	this.anims.create({
 		key:'left',
-		frames: this.anims.generateFrameNumbers('perso', {start: 0, end: 6}),
+		frames: this.anims.generateFrameNumbers('perso', {start: 0, end: 3}),
 		frameRate: 10,
 		repeat: -1
 	});
 
 	this.anims.create({
 		key:'stop',
-		frames: [{key: 'stop', frames:0}],
+		frames: [{key: 'perso', frame:4}],
 		frameRate: 20
 	});
 
@@ -93,15 +90,16 @@ function update(){
 	if(cursors.left.isDown){
 		player.anims.play('left', true);
 		player.setVelocityX(-300);
-		player.setFlipX(true);
+		player.setFlipX(false);
 	}else if(cursors.right.isDown){
 		player.setVelocityX(300);
 		player.anims.play('left', true);
-		player.setFlipX(false);
+		player.setFlipX(true);
 	}else{
 		player.anims.play('stop', true);
 		player.setVelocityX(0);
 	}
+<<<<<<< Updated upstream
 	if (cursors.up.isDown &&player.body.touching.down) {
 		player.setVelocityY(-350);
 
@@ -112,6 +110,17 @@ function update(){
 	Phaser.Math.Between(-400,-800):
 	Phaser.Math.Between(100,400);
 	bombs.setVelocityX(velo_x_bombe);
+=======
+
+	if(cursors.up.isDown && player.body.touching.down){
+		player.setVelocityY(-330);
+	}
+
+	var velo_bomb_x = (player.x < 300) ?
+	Phaser.Math.Between(-400, -800):
+	Phaser.Math.Between(100,800);
+	bombs.setVelocityX(velo_bomb_x);
+>>>>>>> Stashed changes
 
 }
 function hitBomb(player, bomb){
@@ -136,10 +145,10 @@ function collectStar(player, star){
 		var bomb = bombs.create(x, 16, 'bomb');
 		bomb.setBounce(1);
 		bomb.setCollideWorldBounds(true);
-		var velo_x_bombe = (player.x < 400) ?
-		Phaser.Math.Between(-400,-100):
-		Phaser.Math.Between(100,400);
-		bombs.setVelocityX(velo_x_bombe);
-
+		bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+		var velo_bomb_x = (player.x < 300) ?
+		Phaser.Math.Between(-400, -800):
+		Phaser.Math.Between(100,800);
+		bombs.setVelocityX(velo_bomb_x);
 	}
 }
