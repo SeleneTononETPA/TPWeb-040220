@@ -32,9 +32,11 @@ function init(){
 
 var save_touch =1 ;
 var save_saut = 2;
+
 var velo= 300;
 var save_dash = 2;
 var save_touch_droit = 1;
+
 
 function preload(){
 	this.load.image('background','assets/background.png');
@@ -137,6 +139,7 @@ function update(){
 	}
 	if (cursors.up.isUp && player.body.touching.down) {
 		save_saut = 2;
+
 	}
 
 	if (boost.isDown && cursors.left.isDown && save_dash > 0 && save_touch_droit == 1 || boost.isDown && cursors.right.isDown && save_dash > 0 && save_touch_droit == 1) {
@@ -150,6 +153,7 @@ function update(){
 			player.setVelocityX(velo);
 			console.log(velo);
 		}
+r
 	}
 
 	var velo_bomb_x = (player.x < 300) ?
