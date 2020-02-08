@@ -153,7 +153,6 @@ function update(){
 			player.setVelocityX(velo);
 			console.log(velo);
 		}
-r
 	}
 
 	var velo_bomb_x = (player.x < 300) ?
