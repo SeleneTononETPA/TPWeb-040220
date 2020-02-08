@@ -27,10 +27,16 @@ function init(){
 	var stars;
 	var scoreText;
 	var bomb;
+	var over;
 }
 
 var save_touch =1 ;
 var save_saut = 2;
+
+var velo= 300;
+var save_dash = 2;
+var save_touch_droit = 1;
+
 
 function preload(){
 	this.load.image('background','assets/background.png');
@@ -45,6 +51,11 @@ function preload(){
 
 
 function create(){
+
+
+// add key boost
+
+boost = this.input.keyboard.addKey('NUMPAD_ZERO');
 	this.add.image(400,300,'background');
 
 	platforms = this.physics.add.staticGroup();
@@ -92,16 +103,24 @@ function create(){
 
 function update(){
 	if(cursors.left.isDown){
+		velo = -300;
 		player.anims.play('left', true);
-		player.setVelocityX(-300);
+		if (boost.isUp) {
+					player.setVelocityX(velo);
+		}
 		player.setFlipX(true);
 	}else if(cursors.right.isDown){
-		player.setVelocityX(300);
+		velo = 300;
+		if (boost.isUp) {
+					player.setVelocityX(velo);
+		}
 		player.anims.play('left', true);
 		player.setFlipX(false);
-	}else{
+	}
+	else if(cursors.right.isUp && cursors.left.isUp){
 		player.anims.play('stop', true);
 		player.setVelocityX(0);
+		save_touch_droit = 1;
 	}
 
 	if(cursors.up.isDown && save_saut > 0 && save_touch == 1){
@@ -120,6 +139,21 @@ function update(){
 	}
 	if (cursors.up.isUp && player.body.touching.down) {
 		save_saut = 2;
+
+	}
+
+	if (boost.isDown && cursors.left.isDown && save_dash > 0 && save_touch_droit == 1 || boost.isDown && cursors.right.isDown && save_dash > 0 && save_touch_droit == 1) {
+		save_dash -=1;
+		save_touch_droit -=1;
+		console.log(velo);
+		console.log(save_dash);
+		console.log(save_touch_droit);
+		if (save_dash >= 1) {
+			velo = velo*2;
+			player.setVelocityX(velo);
+			console.log(velo);
+		}
+r
 	}
 
 	var velo_bomb_x = (player.x < 300) ?
@@ -133,10 +167,16 @@ function hitBomb(player, bomb){
 	player.setTint(0xff0000);
 	player.anims.play('turn');
 	gameOver=true;
+	over = this.add.text(130,220, 'Game Over', {fontSize: '100px', fill:'#000'});
+	player.anims.play('stop', true , true);
 }
 
 function collectStar(player, star){
 	star.disableBody(true,true);
+	if (save_dash < 5) {
+			save_dash = save_dash +2;
+	}
+
 	score += 10;
 	scoreText.setText('score: '+score);
 	if(stars.countActive(true)===0){
