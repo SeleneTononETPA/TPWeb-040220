@@ -33,6 +33,8 @@ function init(){
 var save_touch =1 ;
 var save_saut = 2;
 var velo= 300;
+var save_dash = 2;
+var save_touch_droit = 1;
 
 function preload(){
 	this.load.image('background','assets/background.png');
@@ -101,16 +103,22 @@ function update(){
 	if(cursors.left.isDown){
 		velo = -300;
 		player.anims.play('left', true);
-		player.setVelocityX(velo);
+		if (boost.isUp) {
+					player.setVelocityX(velo);
+		}
 		player.setFlipX(true);
 	}else if(cursors.right.isDown){
 		velo = 300;
-		player.setVelocityX(velo);
+		if (boost.isUp) {
+					player.setVelocityX(velo);
+		}
 		player.anims.play('left', true);
 		player.setFlipX(false);
-	}else{
+	}
+	else if(cursors.right.isUp && cursors.left.isUp){
 		player.anims.play('stop', true);
 		player.setVelocityX(0);
+		save_touch_droit = 1;
 	}
 
 	if(cursors.up.isDown && save_saut > 0 && save_touch == 1){
@@ -131,9 +139,17 @@ function update(){
 		save_saut = 2;
 	}
 
-	if (boost.isDown && cursors.left.isDown || boost.isDown && cursors.right.isDown) {
-		player.setVelocityX(velo*2);
-		player.anims.play('left', true);
+	if (boost.isDown && cursors.left.isDown && save_dash > 0 && save_touch_droit == 1 || boost.isDown && cursors.right.isDown && save_dash > 0 && save_touch_droit == 1) {
+		save_dash -=1;
+		save_touch_droit -=1;
+		console.log(velo);
+		console.log(save_dash);
+		console.log(save_touch_droit);
+		if (save_dash >= 1) {
+			velo = velo*2;
+			player.setVelocityX(velo);
+			console.log(velo);
+		}
 	}
 
 	var velo_bomb_x = (player.x < 300) ?
@@ -153,6 +169,10 @@ function hitBomb(player, bomb){
 
 function collectStar(player, star){
 	star.disableBody(true,true);
+	if (save_dash < 5) {
+			save_dash = save_dash +2;
+	}
+
 	score += 10;
 	scoreText.setText('score: '+score);
 	if(stars.countActive(true)===0){
