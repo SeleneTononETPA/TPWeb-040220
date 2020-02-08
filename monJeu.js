@@ -28,8 +28,15 @@ function init(){
 	var scoreText;
 	var bomb;
 	var over;
+
 }
 
+
+	var vie_1;
+	var vie_2
+	var vie_3;
+}
+var vie = 3;
 var save_touch =1 ;
 var save_saut = 2;
 
@@ -46,6 +53,9 @@ function preload(){
 	this.load.image('bomb','assets/boule.png');
 	this.load.spritesheet('perso','assets/sprite.png',{frameWidth: 19, frameHeight: 22});
 	this.load.spritesheet('stop', 'assets/stop.png', {frameWidth: 18 , frameHeight: 22});
+	this.load.image('vie_1', 'assets/hp.png');
+	this.load.image('vie_2', 'assets/hp.png');
+	this.load.image('vie_3', 'assets/hp.png');
 }
 
 
@@ -57,6 +67,16 @@ function create(){
 
 boost = this.input.keyboard.addKey('NUMPAD_ZERO');
 	this.add.image(400,300,'background');
+	vie_1 = this.physics.add.staticGroup();
+	vie_2 = this.physics.add.staticGroup();
+	vie_3 = this.physics.add.staticGroup();
+	vie_1.create(750, 16, 'vie_1');
+	vie_2.create(765, 16, 'vie_2');
+	vie_3.create(780, 16, 'vie_3');
+	vie_text = this.add.text(680,6, 'Vie : ', {fontSize: '20px', fill:'#000'});
+// add key boost
+
+boost = this.input.keyboard.addKey('NUMPAD_ZERO');
 
 	platforms = this.physics.add.staticGroup();
 	platforms.create(355,568,'sol').setScale(3).refreshBody();
@@ -145,15 +165,13 @@ function update(){
 	if (boost.isDown && cursors.left.isDown && save_dash > 0 && save_touch_droit == 1 || boost.isDown && cursors.right.isDown && save_dash > 0 && save_touch_droit == 1) {
 		save_dash -=1;
 		save_touch_droit -=1;
-		console.log(velo);
-		console.log(save_dash);
-		console.log(save_touch_droit);
+
 		if (save_dash >= 1) {
 			velo = velo*2;
 			player.setVelocityX(velo);
-			console.log(velo);
+
 		}
-r
+
 	}
 
 	var velo_bomb_x = (player.x < 300) ?
@@ -163,12 +181,25 @@ r
 
 }
 function hitBomb(player, bomb){
-	this.physics.pause();
-	player.setTint(0xff0000);
-	player.anims.play('turn');
-	gameOver=true;
-	over = this.add.text(130,220, 'Game Over', {fontSize: '100px', fill:'#000'});
-	player.anims.play('stop', true , true);
+
+	vie -= 1;
+	player.x = 300;
+	player.y = 20;
+	if (vie == 2) {
+		vie_3.destroy(true);
+	}
+	if (vie == 1) {
+		vie_2.destroy(true);
+	}
+	if (vie == 0) {
+		vie_1.destroy(true);
+		vie_text.destroy(true);
+		player.y = -150;
+		this.physics.pause();
+		gameOver=true;
+		over = this.add.text(130,220, 'Game Over', {fontSize: '100px', fill:'#000'});
+	}
+
 }
 
 function collectStar(player, star){
