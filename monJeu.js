@@ -175,19 +175,18 @@ function hitBomb(player, bomb){
 	player.x = 300;
 	player.y = 20;
 	if (vie == 2) {
-		vie_3.destroy();
+		vie_3.destroy(true);
 	}
 	if (vie == 1) {
-		vie_2.destroy();
+		vie_2.destroy(true);
 	}
 	if (vie == 0) {
-		vie_1.destroy();
+		vie_1.destroy(true);
+		vie_text.destroy(true);
+		player.y = -150;
 		this.physics.pause();
-		player.setTint(0xff0000);
-		player.anims.play('turn');
 		gameOver=true;
 		over = this.add.text(130,220, 'Game Over', {fontSize: '100px', fill:'#000'});
-		player.anims.play('stop', true , true);
 	}
 
 }
