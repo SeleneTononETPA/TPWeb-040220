@@ -130,6 +130,7 @@ boost = this.input.keyboard.addKey('NUMPAD_ZERO');
 
 	this.physics.add.collider(gem_ors, platforms);
 	this.physics.add.overlap(player, gem_ors, collectGem_or, null, this);
+	this.physics.add.overlap(bombs, gem_ors, hitBomb_gem, null, this);
 
 
 }
@@ -260,4 +261,23 @@ function collectGem_or(player, gem_or){
 	gem_or.disableBody(true, true);
 	resistance +=1;
 	console.log(resistance);
+}
+
+function hitBomb_gem(bombs, gem_or){
+	gem_or.disableBody(true, true);
+	vie -=1;
+	if (vie == 2 ) {
+		vie_3.destroy(true);
+	}
+	if (vie == 1) {
+		vie_2.destroy(true);
+	}
+	if (vie == 0) {
+		vie_1.destroy(true);
+		vie_text.destroy(true);
+		player.y = -150;
+		this.physics.pause();
+		gameOver=true;
+		over = this.add.text(130,220, 'Game Over', {fontSize: '100px', fill:'#000'});
+	}
 }
