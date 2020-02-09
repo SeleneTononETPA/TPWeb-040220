@@ -24,7 +24,7 @@ function init(){
  	var platforms;
 	var player;
 	var cursors;
-	var gems;
+	var stars;
 	var scoreText;
 	var bomb;
 	var over;
@@ -49,7 +49,7 @@ var resistance =0;
 function preload(){
 	this.load.image('background','assets/background.png');
 	//this.load.image('fond','assets/fond.png');
-	this.load.image('gem','assets/gem.png');
+	this.load.image('etoile','assets/gem.png');
 	this.load.image('sol','assets/platform.png');
 	this.load.image('bomb','assets/boule.png');
 	this.load.spritesheet('perso','assets/sprite.png',{frameWidth: 19, frameHeight: 22});
@@ -101,14 +101,14 @@ boost = this.input.keyboard.addKey('NUMPAD_ZERO');
 		frameRate: 20
 	});
 
-	gems = this.physics.add.group({
-		key: 'gem',
-		repeat:5,
-		setXY: {x:12,y:0,stepX:180}
+	stars = this.physics.add.group({
+		key: 'etoile',
+		repeat:11,
+		setXY: {x:12,y:0,stepX:70}
 	});
 
-	this.physics.add.collider(gems,platforms);
-	this.physics.add.overlap(player,gems,collectGem,null,this);
+	this.physics.add.collider(stars,platforms);
+	this.physics.add.overlap(player,stars,collectStar,null,this);
 
 	scoreText = this.add.text(16,16, 'score: 0', {fontSize: '32px', fill:'#000'});
 	bombs = this.physics.add.group();
@@ -229,16 +229,16 @@ function hitBomb(player, bomb){
 
 }
 
-function collectGem(player, gem){
-	gem.disableBody(true,true);
+function collectStar(player, star){
+	star.disableBody(true,true);
 	if (save_dash < 5) {
 			save_dash = save_dash +2;
 	}
 
 	score += 10;
 	scoreText.setText('score: '+score);
-	if(gems.countActive(true)===0){
-		gems.children.iterate(function(child){
+	if(stars.countActive(true)===0){
+		stars.children.iterate(function(child){
 			child.enableBody(true,child.x,0, true, true);
 		});
 
