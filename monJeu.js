@@ -24,7 +24,7 @@ function init(){
  	var platforms;
 	var player;
 	var cursors;
-	var stars;
+	var gems;
 	var scoreText;
 	var bomb;
 	var over;
@@ -32,6 +32,8 @@ function init(){
 	var vie_1;
 	var vie_2
 	var vie_3;
+
+	var gem_ors;
 }
 var vie = 3;
 var save_touch =1 ;
@@ -41,11 +43,13 @@ var velo= 300;
 var save_dash = 2;
 var save_touch_droit = 1;
 
+var resistance =0;
+
 
 function preload(){
 	this.load.image('background','assets/background.png');
 	//this.load.image('fond','assets/fond.png');
-	this.load.image('etoile','assets/gem.png');
+	this.load.image('gem','assets/gem.png');
 	this.load.image('sol','assets/platform.png');
 	this.load.image('bomb','assets/boule.png');
 	this.load.spritesheet('perso','assets/sprite.png',{frameWidth: 19, frameHeight: 22});
@@ -53,6 +57,7 @@ function preload(){
 	this.load.image('vie_1', 'assets/hp.png');
 	this.load.image('vie_2', 'assets/hp.png');
 	this.load.image('vie_3', 'assets/hp.png');
+	this.load.spritesheet('gem_or', 'assets/gem_or.png', {frameWidth: 10, frameHeight: 15});
 }
 
 
@@ -96,19 +101,37 @@ boost = this.input.keyboard.addKey('NUMPAD_ZERO');
 		frameRate: 20
 	});
 
-	stars = this.physics.add.group({
-		key: 'etoile',
-		repeat:11,
-		setXY: {x:12,y:0,stepX:70}
+	gems = this.physics.add.group({
+		key: 'gem',
+		repeat:5,
+		setXY: {x:12,y:0,stepX:180}
 	});
 
-	this.physics.add.collider(stars,platforms);
-	this.physics.add.overlap(player,stars,collectStar,null,this);
+	this.physics.add.collider(gems,platforms);
+	this.physics.add.overlap(player,gems,collectGem,null,this);
 
 	scoreText = this.add.text(16,16, 'score: 0', {fontSize: '32px', fill:'#000'});
 	bombs = this.physics.add.group();
 	this.physics.add.collider(bombs,platforms);
 	this.physics.add.collider(player,bombs, hitBomb, null, this);
+
+	this.anims.create({
+		key:'gem_or',
+		frames: this.anims.generateFrameNumbers('gem_or' , {start: 0, end: 3}),
+		frameRate: 30,
+		repeat: -1
+	});
+
+	gem_ors = this.physics.add.group({
+		key: 'gem_or',
+		setXY: {x: -120, y:0},
+	});
+	gem_ors.playAnimation('gem_or');
+
+	this.physics.add.collider(gem_ors, platforms);
+	this.physics.add.overlap(player, gem_ors, collectGem_or, null, this);
+
+
 }
 
 
@@ -171,10 +194,25 @@ function update(){
 
 }
 function hitBomb(player, bomb){
-	vie -= 1;
+	if (resistance <=0) {
+		vie -=1;
+	}
+	if (resistance>0) {
+		resistance -=1;
+	}
+
 	player.x = 300;
 	player.y = 20;
-	if (vie == 2) {
+
+
+	var alea = Phaser.Math.Between(1,2);
+	if (alea == 1 && vie !=0) {
+		var x_gem = Phaser.Math.Between(0,800);
+		var gem_crea = gem_ors.create(x_gem, 16, 'gem_or');
+		gem_ors.playAnimation('gem_or');
+	}
+
+	if (vie == 2 ) {
 		vie_3.destroy(true);
 	}
 	if (vie == 1) {
@@ -191,16 +229,16 @@ function hitBomb(player, bomb){
 
 }
 
-function collectStar(player, star){
-	star.disableBody(true,true);
+function collectGem(player, gem){
+	gem.disableBody(true,true);
 	if (save_dash < 5) {
 			save_dash = save_dash +2;
 	}
 
 	score += 10;
 	scoreText.setText('score: '+score);
-	if(stars.countActive(true)===0){
-		stars.children.iterate(function(child){
+	if(gems.countActive(true)===0){
+		gems.children.iterate(function(child){
 			child.enableBody(true,child.x,0, true, true);
 		});
 
@@ -216,4 +254,10 @@ function collectStar(player, star){
 		Phaser.Math.Between(100,800);
 		bombs.setVelocityX(velo_bomb_x);
 	}
+}
+
+function collectGem_or(player, gem_or){
+	gem_or.disableBody(true, true);
+	resistance +=1;
+	console.log(resistance);
 }
