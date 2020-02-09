@@ -29,9 +29,6 @@ function init(){
 	var bomb;
 	var over;
 
-}
-
-
 	var vie_1;
 	var vie_2
 	var vie_3;
@@ -61,11 +58,6 @@ function preload(){
 
 
 function create(){
-
-
-// add key boost
-
-boost = this.input.keyboard.addKey('NUMPAD_ZERO');
 	this.add.image(400,300,'background');
 	vie_1 = this.physics.add.staticGroup();
 	vie_2 = this.physics.add.staticGroup();
@@ -165,13 +157,11 @@ function update(){
 	if (boost.isDown && cursors.left.isDown && save_dash > 0 && save_touch_droit == 1 || boost.isDown && cursors.right.isDown && save_dash > 0 && save_touch_droit == 1) {
 		save_dash -=1;
 		save_touch_droit -=1;
-
 		if (save_dash >= 1) {
 			velo = velo*2;
 			player.setVelocityX(velo);
 
 		}
-
 	}
 
 	var velo_bomb_x = (player.x < 300) ?
@@ -181,7 +171,6 @@ function update(){
 
 }
 function hitBomb(player, bomb){
-
 	vie -= 1;
 	player.x = 300;
 	player.y = 20;
