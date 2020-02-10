@@ -34,6 +34,8 @@ function init(){
 	var vie_3;
 
 	var gem_ors;
+
+	var gladiator;
 }
 var vie = 3;
 var save_touch =1 ;
@@ -58,6 +60,7 @@ function preload(){
 	this.load.image('vie_2', 'assets/hp.png');
 	this.load.image('vie_3', 'assets/hp.png');
 	this.load.spritesheet('gem_or', 'assets/gem_or.png', {frameWidth: 10, frameHeight: 15});
+	this.load.spritesheet('gladiator', 'assets/gladia.png', {frameWidth: 21, frameHeight: 23});
 }
 
 
