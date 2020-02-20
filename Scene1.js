@@ -193,9 +193,6 @@ class Scene1 extends Phaser.Scene {
       this.projectiles = this.projectile.create(this.player.x, this.player.y, 'proj');
       this.projectiles.setVelocityX((this.velo*2));
     }
-    else if (this.proj.isUp) {
-      this.compteur_proj = 1;
-    }
 
     this.velo_bomb_x = (this.player.x < 300) ?
     Phaser.Math.Between(-400, -800):
@@ -212,6 +209,7 @@ class Scene1 extends Phaser.Scene {
 
 
   hitBomb(player, bomb){
+    this.compteur_proj =1;
     if (this.resistance <=0) {
       this.vie -= 1;
     }

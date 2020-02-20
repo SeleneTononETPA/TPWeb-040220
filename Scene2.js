@@ -31,6 +31,7 @@ class Scene2 extends Phaser.Scene {
     this.stars;
 
     this.over;
+    this.compteur_ramas =0;
 
 
     this.gem_ors;
@@ -223,23 +224,32 @@ class Scene2 extends Phaser.Scene {
       this.ennemie_1.setFlipX(false);
     }
 
-  }
-
-
-  collectStar(player, star){
-    star.disableBody(true, true);
-    if(this.save_dash < 5){
-      this.save_dash = this.save_dash +2;
-    }
-
-
-    if (this.stars.countActive(true)===0) {
+    if (this.compteur_ramas == 18) {
       this.player.y = -150;
       this.physics.pause();
       this.gameOver = true;
       this.over = this.add.text(130, 220, 'Victory !!! ', {fontSize: '100px', fill: '#000'});
 
         this.initialTime = 10000000;
+    }
+    console.log(this.compteur_ramas);
+
+  }
+
+
+  collectStar(player, star){
+    star.disableBody(true, true);
+    this.compteur_ramas +=1;
+    if(this.save_dash < 5){
+      this.save_dash = this.save_dash +2;
+    }
+
+
+    if (this.stars.countActive(true)===0) {
+      this.stars.children.iterate(function(child){
+      child.enableBody(true, child.x, 0, true, true);
+      });
+
 
 
   }
