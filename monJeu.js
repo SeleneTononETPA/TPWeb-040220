@@ -19,6 +19,8 @@ scene: {
 
 var game = new Phaser.Game(config);
 var score = 0;
+var saut = 2;
+var press = 0;
 
 function init(){
  	var platforms;
@@ -101,9 +103,22 @@ function update(){
 		player.anims.play('stop', true);
 		player.setVelocityX(0);
 	}
-	
-	if(cursors.up.isDown && player.body.touching.down){
-		player.setVelocityY(-330);
+	if(cursors.up.isDown && saut > 0 && press == 1){
+		player.setVelocityY(-230);
+		saut -= 1;
+		press -= 1;
+		if (saut == 1) {
+            player.setVelocityY(-230);
+        }
+        if (saut == 0) {
+            player.setVelocityY(-230);
+        }
+	}
+	if(cursors.up.isUp){
+		press = 1;
+	}
+	 if (cursors.up.isUp && player.body.touching.down) {
+		saut = 2;
 	} 
 	
 }
