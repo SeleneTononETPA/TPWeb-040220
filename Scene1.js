@@ -20,6 +20,7 @@ class Scene1 extends Phaser.Scene {
   	this.load.image('vie_2', 'assets/hp.png');
   	this.load.image('vie_3', 'assets/hp.png');
   	this.load.spritesheet('gem_or', 'assets/gem_or.png', {frameWidth: 10, frameHeight: 15});
+    this.load.image('proj', 'assets/proj.png');
 
   }
 
@@ -33,6 +34,7 @@ class Scene1 extends Phaser.Scene {
     this.scoreText;
     this.bomb;
     this.over;
+    this.compteur_proj =1;
 
 
     this.vie_1;
@@ -65,6 +67,7 @@ class Scene1 extends Phaser.Scene {
 
 
     this.boost = this.input.keyboard.addKey('NUMPAD_ZERO');
+    this.proj = this.input.keyboard.addKey('NUMPAD_ONE');
 
     this.platforms = this.physics.add.staticGroup();
     this.platforms.create(355, 568, 'sol').setScale(3).refreshBody();
@@ -105,6 +108,10 @@ class Scene1 extends Phaser.Scene {
     this.bombs  = this.physics.add.group();
     this.physics.add.collider(this.bombs, this.platforms);
     this.physics.add.collider(this.player, this.bombs, this.hitBomb, null, this);
+
+    this.projectile = this.physics.add.group();
+    this.physics.add.collider(this.projectile, this.platforms);
+    this.physics.add.collider(this.projectile, this.bombs, this.hitProj, null, this);
 
     this.anims.create({
       key: 'gem_or',
@@ -179,6 +186,15 @@ class Scene1 extends Phaser.Scene {
         this.velo = this.velo *2;
         this.player.setVelocityX(this.velo);
       }
+    }
+
+    if (this.proj.isDown && this.compteur_proj == 1) {
+      this.compteur_proj -=1;
+      this.projectiles = this.projectile.create(this.player.x, this.player.y, 'proj');
+      this.projectiles.setVelocityX((this.velo*2));
+    }
+    else if (this.proj.isUp) {
+      this.compteur_proj = 1;
     }
 
     this.velo_bomb_x = (this.player.x < 300) ?
@@ -264,6 +280,11 @@ collectGem_or(player, gem_or){
   gem_or.disableBody(true, true);
   this.resistance +=1;
   console.log(this.resistance);
+}
+
+hitProj(projectiles, bombs){
+  bombs.disableBody(true, true);
+  projectiles.disableBody(true, true);
 }
 
 
