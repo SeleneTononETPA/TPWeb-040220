@@ -186,7 +186,7 @@ class Scene1 extends Phaser.Scene {
     Phaser.Math.Between(100, 800);
     this.bombs.setVelocityX(this.velo_bomb_x);
 
-    if (this.score == 280) {
+    if (this.score == 300) {
       this.save_x = this.player.x;
       this.save_y = this.player.y;
       this.scene.start('deuxieme_scene', {x: this.save_x, y: this.save_y, score: this.score, vie: this.vie});
