@@ -46,8 +46,6 @@ function preload(){
 	this.load.image('pv_green','assets/health-green.png');
 }
 
-
-
 function create(){
 	this.add.image(400,300,'background').setScale(3);
 
@@ -89,14 +87,10 @@ function create(){
 		setXY: {x:12,y:0,stepX:70}
 	});
 
-	
-
 	pvGreen = this.physics.add.staticGroup();
 	pvGreen.create(680,80,'pv_green');
 
 	pvRed = this.physics.add.staticGroup();
-	//pvRed.create(680,80,'pv_red');
-	//pvRed.create(580,70,'pv_red').setScale(0.1,1).setOrigin(0,0);
 
 	this.physics.add.collider(stars,platforms);
 	this.physics.add.overlap(player,stars,collectStar,null,this);
