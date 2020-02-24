@@ -30,10 +30,12 @@ function init(){
 	var nombreVie;
 	var bomb;
 	var vie;
+	var item;
 }
 
 function preload(){
 	this.load.image('background','assets/sky.png');	
+	this.load.image('item','assets/item.png');	
 	this.load.image('fond','assets/fond.png');
 	this.load.image('etoile','assets/star.png');
 	this.load.image('sol','assets/platform.png');
@@ -56,6 +58,7 @@ function create(){
 	//player.setBounce(0.2);
 	player.body.setGravityY(000);
 	this.physics.add.collider(player,platforms);
+
 	
 	cursors = this.input.keyboard.createCursorKeys(); 
 	
@@ -86,6 +89,15 @@ function create(){
 	bombs = this.physics.add.group();
 	this.physics.add.collider(bombs,platforms);
 	this.physics.add.collider(player,bombs, hitBomb, null, this);
+		item = this.physics.add.group({
+		key: 'item',
+		repeat:0,
+		setXY: {x:12,y:0,stepX:70}
+	});
+	this.physics.add.collider(item,platforms);
+	this.physics.add.overlap(player,item,collectItem,null,this);
+	
+	
 }
 
 
@@ -148,4 +160,10 @@ function collectStar(player, star){
 		bomb.setCollideWorldBounds(true);
 		bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
 	}
+}
+function collectItem(player, item){
+	item.disableBody(true,true);
+	vie += 1;
+	nombreVie.setText('vie: '+vie);
+	
 }
