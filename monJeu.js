@@ -5,7 +5,7 @@ var config = {
 physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 300 },
+            gravity: { y: 800 },
             debug: true
         }
     },
@@ -35,7 +35,7 @@ function preload(){
 	this.load.image('etoile','assets/star.png');
 	this.load.image('sol','assets/platform.png');
 	this.load.image('bomb','assets/bomb.png');
-	this.load.spritesheet('perso','assets/dude.png',{frameWidth: 32, frameHeight: 48});
+	this.load.spritesheet('perso','assets/dude.png',{frameWidth:77, frameHeight:80});
 }
 
 
@@ -44,13 +44,13 @@ function create(){
 	this.add.image(400,300,'background');
 
 	platforms = this.physics.add.staticGroup();
-	platforms.create(400,568,'sol').setScale(2).refreshBody();
+	platforms.create(400,600,'sol').setScale(4).refreshBody();
 	platforms.create(600,400,'sol');
 	platforms.create(50,250,'sol');
 	
-	player = this.physics.add.sprite(100,450,'perso');
+	player = this.physics.add.sprite(100,450,'perso').setSize(65, 65);
 	player.setCollideWorldBounds(true);
-	player.setBounce(0.2);
+	//player.setBounce(0.2);
 	player.body.setGravityY(000);
 	this.physics.add.collider(player,platforms);
 	
@@ -59,7 +59,7 @@ function create(){
 	this.anims.create({
 		key:'left',
 		frames: this.anims.generateFrameNumbers('perso', {start: 0, end: 3}),
-		frameRate: 10,
+		frameRate: 20,
 		repeat: -1
 	});
 	
@@ -71,7 +71,7 @@ function create(){
 	
 	stars = this.physics.add.group({
 		key: 'etoile',
-		repeat:11,
+		repeat:7,
 		setXY: {x:12,y:0,stepX:70}
 	});
 	
@@ -89,19 +89,28 @@ function create(){
 function update(){
 	if(cursors.left.isDown){
 		player.anims.play('left', true);
-		player.setVelocityX(-300);
-		player.setFlipX(false);
-	}else if(cursors.right.isDown){
-		player.setVelocityX(300);
-		player.anims.play('left', true);
+		player.setVelocityX(-650);
 		player.setFlipX(true);
-	}else{
+	}else if(cursors.right.isDown){
+		player.setVelocityX(650);
+		player.anims.play('left', true);
+		player.setFlipX(false);
+	}
+	else if(cursors.down.isDown){
+		player.setVelocityX(0);
+		player.setVelocityY(1500);
+		player.anims.play('left', true);
+		player.setFlipX(false);
+
+	}
+
+	else{
 		player.anims.play('stop', true);
 		player.setVelocityX(0);
 	}
 	
 	if(cursors.up.isDown && player.body.touching.down){
-		player.setVelocityY(-330);
+		player.setVelocityY(-750);
 	} 
 	
 }
