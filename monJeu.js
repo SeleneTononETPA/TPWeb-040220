@@ -19,6 +19,7 @@ scene: {
 
 var game = new Phaser.Game(config);
 var score = 0;
+var vie = 3;
 
 function init(){
  	var platforms;
@@ -26,7 +27,9 @@ function init(){
 	var cursors; 
 	var stars;
 	var scoreText;
+	var nombreVie;
 	var bomb;
+	var vie;
 }
 
 function preload(){
@@ -79,6 +82,7 @@ function create(){
 	this.physics.add.overlap(player,stars,collectStar,null,this);
 
 	scoreText = this.add.text(16,16, 'score: 0', {fontSize: '32px', fill:'#000'});
+	nombreVie = this.add.text(550,16, 'vie: 0', {fontSize: '32px', fill:'#000'});
 	bombs = this.physics.add.group();
 	this.physics.add.collider(bombs,platforms);
 	this.physics.add.collider(player,bombs, hitBomb, null, this);
@@ -114,17 +118,23 @@ function update(){
 	} 
 	
 }
+
 function hitBomb(player, bomb){
+	nombreVie.setText('vie: '+vie);
+	vie--;
+	if(vie<0){
 	this.physics.pause();
 	player.setTint(0xff0000);
 	player.anims.play('turn');
 	gameOver=true;
+	}
 }
 
 function collectStar(player, star){
 	star.disableBody(true,true);
 	score += 10;
 	scoreText.setText('score: '+score);
+	nombreVie.setText('vie: '+vie);
 	if(stars.countActive(true)===0){
 		stars.children.iterate(function(child){
 			child.enableBody(true,child.x,0, true, true);
