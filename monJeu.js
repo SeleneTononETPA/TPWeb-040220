@@ -30,15 +30,19 @@ function init(){
 	var nombreVie;
 	var bomb;
 	var vie;
+	var item;
+	var mechant;
 }
 
 function preload(){
 	this.load.image('background','assets/sky.png');	
+	this.load.image('item','assets/item.png');	
 	this.load.image('fond','assets/fond.png');
 	this.load.image('etoile','assets/star.png');
 	this.load.image('sol','assets/platform.png');
 	this.load.image('bomb','assets/bomb.png');
 	this.load.spritesheet('perso','assets/dude.png',{frameWidth:77, frameHeight:80});
+	this.load.spritesheet('mechant','assets/dude2.png',{frameWidth:77, frameHeight:80});
 }
 
 
@@ -56,6 +60,7 @@ function create(){
 	//player.setBounce(0.2);
 	player.body.setGravityY(000);
 	this.physics.add.collider(player,platforms);
+
 	
 	cursors = this.input.keyboard.createCursorKeys(); 
 	
@@ -86,6 +91,27 @@ function create(){
 	bombs = this.physics.add.group();
 	this.physics.add.collider(bombs,platforms);
 	this.physics.add.collider(player,bombs, hitBomb, null, this);
+		item = this.physics.add.group({
+		key: 'item',
+		repeat:0,
+		setXY: {x:12,y:0,stepX:70}
+	});
+	this.physics.add.collider(item,platforms);
+	this.physics.add.overlap(player,item,collectItem,null,this);
+	
+	mechant = this.physics.add.sprite(300,450,'mechant').setSize(65, 65);
+	mechant.setCollideWorldBounds(true);
+	//player.setBounce(0.2);
+	mechant.body.setGravityY(000);
+	this.physics.add.collider(mechant,platforms);
+	
+		this.anims.create({
+		key:'left2',
+		frames: this.anims.generateFrameNumbers('mechant', {start: 0, end: 3}),
+		frameRate: 20,
+		repeat: -1
+	});
+	
 }
 
 
@@ -117,6 +143,13 @@ function update(){
 		player.setVelocityY(-750);
 	} 
 	
+	
+		if(cursors.left.isDown){
+		mechant.anims.play('left2', true);
+		mechant.setVelocityX(-650);
+		mechant.setFlipX(true);
+	
+		}
 }
 
 function hitBomb(player, bomb){
@@ -135,6 +168,7 @@ function collectStar(player, star){
 	score += 10;
 	scoreText.setText('score: '+score);
 	nombreVie.setText('vie: '+vie);
+	mechant.setVelocity(Phaser.Math.Between(-200, 200), 20);
 	if(stars.countActive(true)===0){
 		stars.children.iterate(function(child){
 			child.enableBody(true,child.x,0, true, true);
@@ -148,4 +182,10 @@ function collectStar(player, star){
 		bomb.setCollideWorldBounds(true);
 		bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
 	}
+}
+function collectItem(player, item){
+	item.disableBody(true,true);
+	vie += 1;
+	nombreVie.setText('vie: '+vie);
+	
 }
